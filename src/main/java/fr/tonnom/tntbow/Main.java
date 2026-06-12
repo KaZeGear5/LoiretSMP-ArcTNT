@@ -50,4 +50,11 @@ public class Main extends JavaPlugin implements CommandExecutor {
 
     private void registerTNTBowRecipe() {
         NamespacedKey key = new NamespacedKey(this, "tnt_bow_special");
-        ShapedRecipe recipe = new ShapedRecipe(key, createTNTBow())
+        ShapedRecipe recipe = new ShapedRecipe(key, createTNTBow());
+        recipe.shape("SBS", "BTB", "SBS");
+        recipe.setIngredient('T', Material.TNT);
+        recipe.setIngredient('B', Material.BOW);
+        recipe.setIngredient('S', Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE);
+        Bukkit.addRecipe(recipe);
+    }
+}
