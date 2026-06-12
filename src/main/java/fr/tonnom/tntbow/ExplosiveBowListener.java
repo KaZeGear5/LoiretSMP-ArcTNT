@@ -20,12 +20,12 @@ public class ExplosiveBowListener implements Listener {
                 Player player = (Player) arrow.getShooter();
                 ItemStack bow = player.getInventory().getItemInMainHand();
 
-                if (bow.hasItemMeta() && "§cArc TNT".equals(bow.getItemMeta().getDisplayName())) {
+                // On vérifie directement si l'arc possède notre CustomModelData (12345)
+                if (bow.hasItemMeta() && bow.getItemMeta().hasCustomModelData() && bow.getItemMeta().getCustomModelData() == 12345) {
                     Location hitLocation = arrow.getLocation();
                     World world = hitLocation.getWorld();
 
                     if (world != null) {
-                        // Force poussée à 25.0F pour un cratère monstrueux
                         world.createExplosion(hitLocation, 25.0F, true, true, player);
                     }
                     arrow.remove();
