@@ -13,11 +13,9 @@ public class Main extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onEnable() {
-        // Enregistre l'évenement de tir à l'arc
         getServer().getPluginManager().registerEvents(new ExplosiveBowListener(), this);
-        // Enregistre la commande /givetntbow
         this.getCommand("givetntbow").setExecutor(this);
-        getLogger().info("Plugin TNTBow activé avec succès !");
+        getLogger().info("Plugin TNTBow active avec succes !");
     }
 
     @Override
@@ -30,15 +28,15 @@ public class Main extends JavaPlugin implements CommandExecutor {
 
             if (meta != null) {
                 meta.setDisplayName("§cArc TNT"); 
-                meta.setCustomModelData(12345); // Pour ton Resource Pack
+                meta.setCustomModelData(12345); // Active la texture personnalisée
                 tntBow.setItemMeta(meta);
             }
 
             player.getInventory().addItem(tntBow);
-            player.sendMessage("§a[TNTBow] Tu as reçu l'Arc TNT !");
+            player.sendMessage("§a[TNTBow] Tu as recu l'Arc TNT Surpuissant !");
             return true;
         }
-        sender.sendMessage("Seul un joueur peut exécuter cette commande.");
+        sender.sendMessage("Seul un joueur peut executer cette commande.");
         return true;
     }
 }
