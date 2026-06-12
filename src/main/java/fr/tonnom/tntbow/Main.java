@@ -20,7 +20,7 @@ public class Main extends JavaPlugin implements CommandExecutor {
         getServer().getPluginManager().registerEvents(new ExplosiveBowListener(), this);
         this.getCommand("givetntbow").setExecutor(this);
         
-        // Enregistrement du craft personnalisé
+        // Enregistrement du craft spécial
         registerTNTBowRecipe();
         
         getLogger().info("Plugin TNTBow active avec succes !");
@@ -38,13 +38,13 @@ public class Main extends JavaPlugin implements CommandExecutor {
         return true;
     }
 
-    // Fonction qui crée l'arc avec le nom en dégradé et le CustomModelData
+    // Crée l'arc avec le dégradé Rouge et Noir en Gras
     public ItemStack createTNTBow() {
         ItemStack tntBow = new ItemStack(Material.BOW);
         ItemMeta meta = tntBow.getItemMeta();
 
         if (meta != null) {
-            // Dégradé du Rouge (red) vers le Noir (black) en Gras (b)
+            // Dégradé du Rouge (red) vers le Noir (black) en Gras (b) via MiniMessage
             var mm = MiniMessage.miniMessage();
             meta.displayName(mm.deserialize("<b><gradient:red:black>Arc TNT</gradient></b>"));
             
@@ -54,15 +54,23 @@ public class Main extends JavaPlugin implements CommandExecutor {
         return tntBow;
     }
 
-    // Fonction pour le Craft
+    // Configuration de ton craft spécial
     private void registerTNTBowRecipe() {
-        NamespacedKey key = new NamespacedKey(this, "tnt_bow");
+        NamespacedKey key = new NamespacedKey(this, "tnt_bow_special");
         ShapedRecipe recipe = new ShapedRecipe(key, createTNTBow());
 
-        // Grille de craft : T = TNT, B = Arc (Bow)
-        recipe.shape("TTT", "TBT", "TTT");
+        /*
+           Grille de craft :
+           S B S  (Silence / Arc / Silence)
+           B T B  (Arc / TNT / Arc)
+           S B S  (Silence / Arc / Silence)
+        */
+        recipe.shape("SBS", "BTB", "SBS");
+
+        // Ingrédients demandés
         recipe.setIngredient('T', Material.TNT);
         recipe.setIngredient('B', Material.BOW);
+        recipe.setIngredient('S', Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE);
 
         Bukkit.addRecipe(recipe);
     }
