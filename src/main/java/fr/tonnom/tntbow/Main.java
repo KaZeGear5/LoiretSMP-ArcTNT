@@ -18,11 +18,9 @@ public class Main extends JavaPlugin implements CommandExecutor {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new ExplosiveBowListener(), this);
+        getServer().getPluginManager().registerEvents(new CraftListener(this), this);
         this.getCommand("givetntbow").setExecutor(this);
-        
-        // Enregistrement du craft spécial
         registerTNTBowRecipe();
-        
         getLogger().info("Plugin TNTBow active avec succes !");
     }
 
@@ -38,40 +36,18 @@ public class Main extends JavaPlugin implements CommandExecutor {
         return true;
     }
 
-    // Crée l'arc avec le dégradé Rouge et Noir en Gras
     public ItemStack createTNTBow() {
         ItemStack tntBow = new ItemStack(Material.BOW);
         ItemMeta meta = tntBow.getItemMeta();
-
         if (meta != null) {
-            // Dégradé du Rouge (red) vers le Noir (black) en Gras (b) via MiniMessage
             var mm = MiniMessage.miniMessage();
             meta.displayName(mm.deserialize("<b><gradient:red:black>Arc TNT</gradient></b>"));
-            
             meta.setCustomModelData(12345);
             tntBow.setItemMeta(meta);
         }
         return tntBow;
     }
 
-    // Configuration de ton craft spécial
     private void registerTNTBowRecipe() {
         NamespacedKey key = new NamespacedKey(this, "tnt_bow_special");
-        ShapedRecipe recipe = new ShapedRecipe(key, createTNTBow());
-
-        /*
-           Grille de craft :
-           S B S  (Silence / Arc / Silence)
-           B T B  (Arc / TNT / Arc)
-           S B S  (Silence / Arc / Silence)
-        */
-        recipe.shape("SBS", "BTB", "SBS");
-
-        // Ingrédients demandés
-        recipe.setIngredient('T', Material.TNT);
-        recipe.setIngredient('B', Material.BOW);
-        recipe.setIngredient('S', Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE);
-
-        Bukkit.addRecipe(recipe);
-    }
-}
+        ShapedRecipe recipe = new ShapedRecipe(key, createTNTBow())
