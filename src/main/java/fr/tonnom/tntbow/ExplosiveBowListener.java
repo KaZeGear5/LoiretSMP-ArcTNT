@@ -25,8 +25,8 @@ public class ExplosiveBowListener implements Listener {
                     World world = hitLocation.getWorld();
 
                     if (world != null) {
-                        // Force de 7.0F pour un trou énorme (La TNT de base est à 4.0F)
-                        world.createExplosion(hitLocation, 7.0F, true, true, player);
+                        // Force poussée à 25.0F pour un cratère monstrueux
+                        world.createExplosion(hitLocation, 25.0F, true, true, player);
                     }
                     arrow.remove();
                 }
