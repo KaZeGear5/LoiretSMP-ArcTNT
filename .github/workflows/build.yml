@@ -1,0 +1,31 @@
+name: Build Paper Plugin
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Récupérer le code source
+      uses: actions/checkout@v4
+
+    - name: Configurer Java 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+        cache: 'maven' # Optimise la vitesse en mettant les dépendances en cache
+
+    - name: Compiler le plugin à toute vitesse
+      run: mvn clean package --batch-mode --errors
+
+    - name: Télécharger le fichier .jar
+      uses: actions/upload-artifact@v4
+      with:
+        name: TNT-Bow-Plugin
+        path: target/*.jar
