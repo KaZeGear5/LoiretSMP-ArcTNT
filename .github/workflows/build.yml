@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Récupérer le code source
+    - name: Recuperer le code source
       uses: actions/checkout@v4
 
     - name: Configurer Java 21
@@ -19,12 +19,12 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '21'
-        cache: 'maven' # Optimise la vitesse en mettant les dépendances en cache
+        cache: 'maven'
 
-    - name: Compiler le plugin à toute vitesse
+    - name: Compiler le plugin a toute vitesse
       run: mvn clean package --batch-mode --errors
 
-    - name: Télécharger le fichier .jar
+    - name: Telecharger le fichier .jar
       uses: actions/upload-artifact@v4
       with:
         name: TNT-Bow-Plugin
