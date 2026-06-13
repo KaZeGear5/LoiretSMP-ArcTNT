@@ -21,9 +21,17 @@ public class CraftListener implements Listener {
         ItemMeta meta = result.getItemMeta();
 
         if (meta != null && meta.hasCustomModelData() && meta.getCustomModelData() == 12345) {
+            if (Main.isBowExists()) {
+                event.setCancelled(true);
+                if (event.getWhoClicked() instanceof Player player) {
+                    player.sendMessage("§c[TNTBow] L'Arc TNT existe déjà dans le monde, il ne peut pas être recrafté !");
+                }
+                return;
+            }
             if (event.getWhoClicked() instanceof Player player) {
+                Main.setBowExists(true);
                 plugin.getServer().broadcastMessage(
-                    "§6" + player.getName() + " §aa craft le §cTNT Bow §a!"
+                    "§6" + player.getName() + " §aa craft le §cTNT Bow§a !"
                 );
             }
         }
