@@ -24,15 +24,18 @@ public class CraftListener implements Listener {
             if (Main.isBowExists()) {
                 event.setCancelled(true);
                 if (event.getWhoClicked() instanceof Player player) {
-                    player.sendMessage("§c[TNTBow] L'Arc TNT existe déjà dans le monde, il ne peut pas être recrafté !");
+                    player.sendMessage("§c[TNTBow] L'Arc TNT existe déjà dans le monde, il ne peut pas être recrafté !"
+                        + (Main.getBowOwner() != null ? " Il appartient à §6" + Main.getBowOwner() + "§c." : ""));
                 }
                 return;
             }
             if (event.getWhoClicked() instanceof Player player) {
                 Main.setBowExists(true);
+                Main.setBowOwner(player.getName());
                 plugin.getServer().broadcastMessage(
-                    "§6" + player.getName() + " §aa craft le §cTNT Bow§a !"
+                    "§6[TNTBow] §a" + player.getName() + " §aa crafté l'§cArc TNT§a !"
                 );
+                plugin.getLogger().info("[TNTBow] Arc TNT crafté par : " + player.getName());
             }
         }
     }
