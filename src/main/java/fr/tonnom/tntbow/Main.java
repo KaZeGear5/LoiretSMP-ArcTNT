@@ -25,12 +25,28 @@ public class Main extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+        loadBowState();
+
         getServer().getPluginManager().registerEvents(new ExplosiveBowListener(), this);
         getServer().getPluginManager().registerEvents(new CraftListener(this), this);
         getServer().getPluginManager().registerEvents(new BowTrackListener(this), this);
         this.getCommand("givetntbow").setExecutor(this);
         registerTNTBowRecipe();
         getLogger().info("Plugin TNTBow active avec succes !");
+    }
+
+    private void loadBowState() {
+        bowExists = getConfig().getBoolean("bow.exists", false);
+        bowOwner = getConfig().getString("bow.owner", null);
+        if (bowOwner != null && bowOwner.equals("null")) bowOwner = null;
+        getLogger().info("[TNTBow] État chargé — Arc existant : " + bowExists + " | Propriétaire : " + (bowOwner != null ? bowOwner : "aucun"));
+    }
+
+    public static void saveBowState(JavaPlugin plugin) {
+        plugin.getConfig().set("bow.exists", bowExists);
+        plugin.getConfig().set("bow.owner", bowOwner != null ? bowOwner : "null");
+        plugin.saveConfig();
     }
 
     @Override
@@ -44,6 +60,7 @@ public class Main extends JavaPlugin implements CommandExecutor {
             player.getInventory().addItem(createTNTBow());
             bowExists = true;
             bowOwner = player.getName();
+            saveBowState(this);
             Bukkit.broadcastMessage("§6[TNTBow] §a" + player.getName() + " §aa reçu l'§cArc TNT§a !");
             getLogger().info("[TNTBow] Arc TNT donné à : " + player.getName());
             return true;
