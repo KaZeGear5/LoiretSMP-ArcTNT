@@ -15,10 +15,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements CommandExecutor {
 
+    private static boolean bowExists = false;
+
+    public static boolean isBowExists() { return bowExists; }
+    public static void setBowExists(boolean value) { bowExists = value; }
+
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new ExplosiveBowListener(), this);
         getServer().getPluginManager().registerEvents(new CraftListener(this), this);
+        getServer().getPluginManager().registerEvents(new BowTrackListener(this), this);
         this.getCommand("givetntbow").setExecutor(this);
         registerTNTBowRecipe();
         getLogger().info("Plugin TNTBow active avec succes !");
@@ -26,10 +32,14 @@ public class Main extends JavaPlugin implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
+            if (bowExists) {
+                player.sendMessage("§c[TNTBow] L'Arc TNT existe déjà dans le monde !");
+                return true;
+            }
             player.getInventory().addItem(createTNTBow());
             player.sendMessage("§a[TNTBow] Tu as recu l'Arc TNT !");
+            bowExists = true;
             return true;
         }
         sender.sendMessage("Seul un joueur peut executer cette commande.");
@@ -46,6 +56,12 @@ public class Main extends JavaPlugin implements CommandExecutor {
             tntBow.setItemMeta(meta);
         }
         return tntBow;
+    }
+
+    public static boolean isTNTBow(ItemStack item) {
+        if (item == null || item.getType() != Material.BOW) return false;
+        ItemMeta meta = item.getItemMeta();
+        return meta != null && meta.hasCustomModelData() && meta.getCustomModelData() == 12345;
     }
 
     private void registerTNTBowRecipe() {
