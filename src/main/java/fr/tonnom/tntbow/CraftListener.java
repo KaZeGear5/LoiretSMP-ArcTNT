@@ -32,6 +32,7 @@ public class CraftListener implements Listener {
             if (event.getWhoClicked() instanceof Player player) {
                 Main.setBowExists(true);
                 Main.setBowOwner(player.getName());
+                Main.saveBowState(plugin);
                 plugin.getServer().broadcastMessage(
                     "§6[TNTBow] §a" + player.getName() + " §aa crafté l'§cArc TNT§a !"
                 );
