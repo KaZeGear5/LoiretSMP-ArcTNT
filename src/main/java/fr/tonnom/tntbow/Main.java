@@ -16,9 +16,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin implements CommandExecutor {
 
     private static boolean bowExists = false;
+    private static String bowOwner = null;
 
     public static boolean isBowExists() { return bowExists; }
     public static void setBowExists(boolean value) { bowExists = value; }
+    public static String getBowOwner() { return bowOwner; }
+    public static void setBowOwner(String name) { bowOwner = name; }
 
     @Override
     public void onEnable() {
@@ -34,12 +37,15 @@ public class Main extends JavaPlugin implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
             if (bowExists) {
-                player.sendMessage("§c[TNTBow] L'Arc TNT existe déjà dans le monde !");
+                player.sendMessage("§c[TNTBow] L'Arc TNT existe déjà dans le monde !"
+                    + (bowOwner != null ? " Il appartient à §6" + bowOwner + "§c." : ""));
                 return true;
             }
             player.getInventory().addItem(createTNTBow());
-            player.sendMessage("§a[TNTBow] Tu as recu l'Arc TNT !");
             bowExists = true;
+            bowOwner = player.getName();
+            Bukkit.broadcastMessage("§6[TNTBow] §a" + player.getName() + " §aa reçu l'§cArc TNT§a !");
+            getLogger().info("[TNTBow] Arc TNT donné à : " + player.getName());
             return true;
         }
         sender.sendMessage("Seul un joueur peut executer cette commande.");
